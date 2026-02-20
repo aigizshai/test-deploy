@@ -41,6 +41,16 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
-        script: |
-          chmod +x ~/myapp
-            sudo systemctl restart my-app-service  
+        script: |     
+          cd /var/www/my-app
+          chmod +x myapp
+          pkill -f myapp || true
+          nohup ./myapp > app.log 2>&1 &
+          sleep 2
+          if pgrep -f myapp > /dev/null; then
+            echo "✅ Приложение успешно запущено"
+          else
+            echo "❌ Ошибка: процесс не запустился. Проверьте app.log"
+            cat app.log
+            exit 1
+          fi
