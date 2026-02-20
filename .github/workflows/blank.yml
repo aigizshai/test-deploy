@@ -35,21 +35,28 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         source: "myapp"
         target: "~/" # Путь на сервере
-    - name: Restart Service
+    - name: Run app in background via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
-        script: |     
+        script: |
+          set -e
           chmod +x myapp
-          pkill -f myapp || true
-          nohup ./myapp > app.log 2>&1 &
-          sleep 2
-          if pgrep -f myapp > /dev/null; then
-            echo "✅ Приложение успешно запущено"
+          pkill myapp || true
+          if setsid >/dev/null 2>&1; then
+            setsid ./myapp > app.log 2>&1 < /dev/null &
           else
-            echo "❌ Ошибка: процесс не запустился. Проверьте app.log"
-            cat app.log
-            exit 1
+            nohup ./myapp > app.log 2>&1 < /dev/null &
+          disown
+          fi
+
+          sleep 3
+          if pgrep myapp > /dev/null; then
+            echo "✅ Приложение успешно запущено (PID=$(pgrep myapp))"
+          else
+            echo "❌ Ошибка: процесс не запустился. Проверьте app.log:"
+          cat app.log
+          exit 1
           fi
