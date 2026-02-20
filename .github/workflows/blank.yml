@@ -34,7 +34,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "myapp"
-        target: "~/my-app" # Путь на сервере
+        target: "~/" # Путь на сервере
     - name: Restart Service
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -42,7 +42,6 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |     
-          cd /var/www/my-app
           chmod +x myapp
           pkill -f myapp || true
           nohup ./myapp > app.log 2>&1 &
