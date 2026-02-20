@@ -34,7 +34,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "myapp"
-        target: "/var/www/my-app" # Путь на сервере
+        target: "~/my-app" # Путь на сервере
     - name: Restart Service
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -42,5 +42,5 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          chmod +x /var/www/my-app/myapp
+          chmod +x ~/myapp
             sudo systemctl restart my-app-service  
