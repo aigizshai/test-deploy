@@ -21,7 +21,7 @@ jobs:
       run: |
         cd ./src
         go mod tidy
-        go build -o backend-pioneer ./src/main.go
+        go build -o backend-pioneer main.go
 
     - name: Deploy to Server via SSH
       uses: appleboy/scp-action@v0.1.7
