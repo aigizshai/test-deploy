@@ -35,9 +35,9 @@ jobs:
     - name: Restart Service
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.SSH_PROD_HOST }}
+        username: ${{ secrets.SSH_PROD_USER }}
+        key: ${{ secrets.SSH_PROD_KEY }}
         script: |
           chmod +x /var/www/backend-pioneer/backend-pioneer
           sudo systemctl restart backend-pioneer.service  
