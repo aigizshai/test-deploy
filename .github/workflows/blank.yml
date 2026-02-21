@@ -22,6 +22,7 @@ jobs:
         cd ./src
         go mod tidy
         go build -o backend-pioneer main.go
+        mv backend-pioneer ../
 
     - name: Deploy to Server via SSH
       uses: appleboy/scp-action@v0.1.7
@@ -29,7 +30,7 @@ jobs:
         host: ${{ secrets.SSH_PROD_HOST }}
         username: ${{ secrets.SSH_PROD_USER }}
         key: ${{ secrets.SSH_PROD_KEY }}
-        source: "./src/backend-pioneer"
+        source: "backend-pioneer"
         target: "/var/www/backend-pioneer"
     - name: Restart Service
       uses: appleboy/ssh-action@v1.0.3
