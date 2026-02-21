@@ -12,7 +12,7 @@ func main() {
 	r := mux.NewRouter()
 	log.Println("test")
 	log.Println("aaa")
-	log.Println("123")
+	log.Println("успешный рестарт")
 	log.Println("Сервер запущен на http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
