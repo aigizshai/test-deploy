@@ -20,6 +20,7 @@ jobs:
     - name: Build App
       run: |
         cd ./src
+        go mod tidy
         go build -o backend-pioneer main.go
 
     - name: Deploy to Server via SSH
