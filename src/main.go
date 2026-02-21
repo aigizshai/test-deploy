@@ -10,7 +10,7 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-
+	log.Println("test")
 	log.Println("Сервер запущен на http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
