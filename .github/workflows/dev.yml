@@ -23,13 +23,18 @@ jobs:
         go build -o backend-pioneer main.go
         mv backend-pioneer ../
 
+    - name: Create .env 
+      run: |
+        echo "DB_URL"='${{secrets.DB_URL}}'>.env
+
+
     - name: Deploy to Server via SSH
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.SSH_DEV_HOST }}
         username: ${{ secrets.SSH_DEV_USER }}
         key: ${{ secrets.SSH_DEV_KEY }}
-        source: "backend-pioneer"
+        source: "backend-pioneer, .env"
         target: "/var/www/backend-pioneer"
     - name: Restart Service
       uses: appleboy/ssh-action@v1.0.3
@@ -38,5 +43,6 @@ jobs:
         username: ${{ secrets.SSH_DEV_USER }}
         key: ${{ secrets.SSH_DEV_KEY }}
         script: |
+          sudo chmod 600 .env
           chmod +x /var/www/backend-pioneer/backend-pioneer
           sudo systemctl restart backend-pioneer.service  
